@@ -1,0 +1,114 @@
+<div class="row all-sprints-container">
+  <div *ngFor="let todo of todos | orderByTodoInitialDatePipe" class="col-xs-12 col-sm-6 col-md-4 col-lg-3 sprint-container">
+    <div class="sprint-title">
+        <a class="sprint-title-edit">{{todo.name}}</a>
+        <i class="fa fa-pencil sprint-edit-icon" aria-hidden="true"></i>
+        <button class="btn-sprint-remove" (click)="delete(todo)">x</button>
+      </div>
+    <div class="sprint-date">{{todo.initialDate | date: 'dd/MM/yyyy'}} até {{todo.finalDate | date: 'dd/MM/yyyy'}}</div>
+    <div class="sprint-content">
+      <div class="sprint-content-stories" [attr.id]="todo._id" [dragula]='"first-bag"'>
+        <div [attr.id]="story._id" *ngFor="let story of (stories | storyOfSprintFilter:todo._id) | orderByStoryOrder" class="story-container">
+          <div class="story-content">
+            <div class="row">
+              <div class="col-xs-10">
+                <a class="story-title-edit">{{story.name}}</a>
+                <i class="fa fa-pencil story-edit-icon" aria-hidden="true"></i>
+              </div>
+              <div class="col-xs-2">
+                <button class="btn-story-remove" (click)="deleteStory(story)">X</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="story-new-container">
+        <div class="story-new-content">
+          <button class="btn-story-new" (click)="lgModalStories.show(); novoStory._sprintId = todo._id">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 sprint-new-container">
+    <div class="sprint-new-content">
+      <button class="btn-sprint-new" (click)="lgModal.show(); ">+</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para criar sprints -->
+<div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" (click)="lgModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Novo Container</h4>
+      </div>
+      <div class="modal-body">
+          <form ngNoForm>
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label for="title">Título:</label>
+                  <input [(ngModel)]="novoSprint.name" type="text" class="form-control" id="title" placeholder="Identificação do Sprint">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-6">
+                <div class="form-group">
+                  <label for="initialDate">Data de Início:</label>
+                  <input [(ngModel)]="novoSprint.initialDate" class="form-control" id="initialDate" placeholder="Data inicial">
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <div class="form-group">
+                  <label for="finalDate">Data de fim:</label>
+                  <input [(ngModel)]="novoSprint.finalDate" class="form-control" id="finalDate" placeholder="Data final">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <button class="btn btn-default" (click)="add(); $event.preventDefault(); lgModal.hide();">Submit</button>
+              </div>
+            </div>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para criar historias -->
+<div bsModal #lgModalStories="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" (click)="lgModalStories.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Nova Tarefa</h4>
+      </div>
+      <div class="modal-body">
+          <form ngNoForm>
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label for="title">Título:</label>
+                  <input [(ngModel)]="novoStory.name" type="text" class="form-control" id="title" placeholder="Identificação do Sprint">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <button class="btn btn-default" (click)="addStory(); $event.preventDefault(); lgModalStories.hide();">Submit</button>
+              </div>
+            </div>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+.sprint-edit-icon {
+    margin-left: 5px;
+    display: none;
+    color: rgb(168, 168, 168)
+}
+
+.sprint-title-edit:hover + .sprint-edit-icon {
+    display: inline-block;
+}
+
+.story-edit-icon {
+    margin-left: 5px;
+    display: none;
+    color: rgb(168, 168, 168)
+}
+
+.story-title-edit:hover + .story-edit-icon {
+    display: inline-block;
+}

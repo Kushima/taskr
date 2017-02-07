@@ -1,0 +1,10 @@
+.modal-backdrop.fade {
+  opacity: 0;
+  filter: alpha(opacity=0);
+  background-color: #fff;
+}
+.modal-backdrop.fade.in {
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+  background-color: #fff;
+}

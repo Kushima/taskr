@@ -1,7 +1,7 @@
 <div class="row all-sprints-container">
   <div *ngFor="let todo of todos | orderByTodoInitialDatePipe" class="col-xs-12 col-sm-6 col-md-4 col-lg-3 sprint-container">
     <div class="sprint-title">
-        <a class="sprint-title-edit">{{todo.name}}</a>
+        <a class="sprint-title-edit" (click)="editContainer(todo); lgModal.show();">{{todo.name}}</a>
         <i class="fa fa-pencil sprint-edit-icon" aria-hidden="true"></i>
         <button class="btn-sprint-remove" (click)="delete(todo)">x</button>
       </div>
@@ -12,7 +12,9 @@
           <div class="story-content">
             <div class="row">
               <div class="col-xs-10">
-                <a class="story-title-edit">{{story.name}}</a>
+                <a class="story-title-edit" (click)="lgModalStories.show(); novoStory._sprintId = todo._id">
+                  {{story.name}}
+                </a>
                 <i class="fa fa-pencil story-edit-icon" aria-hidden="true"></i>
               </div>
               <div class="col-xs-2">
@@ -32,7 +34,7 @@
 
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 sprint-new-container">
     <div class="sprint-new-content">
-      <button class="btn-sprint-new" (click)="lgModal.show(); ">+</button>
+      <button class="btn-sprint-new" (click)="resetNewOrEditContainer(); lgModal.show(); isEditingContainer = false;">+</button>
     </div>
   </div>
 </div>
@@ -45,7 +47,7 @@
         <button type="button" class="close" (click)="lgModal.hide()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title">Novo Container</h4>
+        <h4 class="modal-title">Container</h4>
       </div>
       <div class="modal-body">
           <form ngNoForm>
@@ -53,7 +55,7 @@
               <div class="col-xs-12">
                 <div class="form-group">
                   <label for="title">Título:</label>
-                  <input [(ngModel)]="novoSprint.name" type="text" class="form-control" id="title" placeholder="Identificação do Sprint">
+                  <input [(ngModel)]="newOrEditContainer.name" type="text" class="form-control" id="title" placeholder="Identificação do Sprint">
                 </div>
               </div>
             </div>
@@ -61,19 +63,22 @@
               <div class="col-xs-6">
                 <div class="form-group">
                   <label for="initialDate">Data de Início:</label>
-                  <input [(ngModel)]="novoSprint.initialDate" class="form-control" id="initialDate" placeholder="Data inicial">
+                  <input [(ngModel)]="newOrEditContainer.initialDate" class="form-control" id="initialDate" placeholder="Data inicial">
                 </div>
               </div>
               <div class="col-xs-6">
                 <div class="form-group">
                   <label for="finalDate">Data de fim:</label>
-                  <input [(ngModel)]="novoSprint.finalDate" class="form-control" id="finalDate" placeholder="Data final">
+                  <input [(ngModel)]="newOrEditContainer.finalDate" class="form-control" id="finalDate" placeholder="Data final">
                 </div>
               </div>
             </div>
             <div class="row">
               <div class="col-xs-12">
-                <button class="btn btn-default" (click)="add(); $event.preventDefault(); lgModal.hide();">Submit</button>
+                <button *ngIf="!isEditingContainer" class="btn btn-default pull-right"
+                  (click)="add(); $event.preventDefault(); lgModal.hide();">Create</button>
+                <button *ngIf="isEditingContainer" class="btn btn-default pull-right"
+                    (click)="edit(); $event.preventDefault(); lgModal.hide();">Edit</button>
               </div>
             </div>
           </form>
@@ -90,7 +95,7 @@
         <button type="button" class="close" (click)="lgModalStories.hide()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title">Nova Tarefa</h4>
+        <h4 class="modal-title">Task</h4>
       </div>
       <div class="modal-body">
           <form ngNoForm>
@@ -104,7 +109,7 @@
             </div>
             <div class="row">
               <div class="col-xs-12">
-                <button class="btn btn-default" (click)="addStory(); $event.preventDefault(); lgModalStories.hide();">Submit</button>
+                <button class="btn btn-default pull-right" (click)="addStory(); $event.preventDefault(); lgModalStories.hide();">Submit</button>
               </div>
             </div>
           </form>

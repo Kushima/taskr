@@ -19,7 +19,9 @@ import * as moment from 'moment';
 
 export class TodosComponent implements OnInit {
 
-  novoSprint: Todo = { _id: null, name: null, initialDate: null, finalDate: null};
+  isEditingContainer: boolean = false;
+
+  newOrEditContainer: Todo = { _id: null, name: null, initialDate: null, finalDate: null};
   novoStory: Story = { _id: null, name: null, order: null, _sprintId: null };
 
   todos: Todo[];
@@ -50,10 +52,10 @@ export class TodosComponent implements OnInit {
   }
 
   add(): void {
-    this.novoSprint.initialDate = new Date(this.novoSprint.initialDate);
-    this.novoSprint.finalDate = new Date(this.novoSprint.finalDate);
+    this.newOrEditContainer.initialDate = new Date(this.newOrEditContainer.initialDate);
+    this.newOrEditContainer.finalDate = new Date(this.newOrEditContainer.finalDate);
 
-    this.todoService.create(this.novoSprint)
+    this.todoService.create(this.newOrEditContainer)
       .then(
         todo =>  {
           this.todos.push(todo);
@@ -73,7 +75,7 @@ export class TodosComponent implements OnInit {
             return 0;
           });
 
-          this.novoSprint = { _id: null, name: null, initialDate: null, finalDate: null};
+          this.resetNewOrEditContainer();
         } );
   }
 
@@ -113,7 +115,13 @@ export class TodosComponent implements OnInit {
     }
   }
 
-  private updateStoryPlace(event) {
+
+  editContainer(todo: Todo): void {
+    this.newOrEditContainer = todo;
+    this.isEditingContainer = true;
+  }
+
+  private updateStoryPlace(event): void {
 
     //Isto é um evento do dragula!
     // Tarefa: tarefa que foi movida
@@ -134,15 +142,19 @@ export class TodosComponent implements OnInit {
         name: null,
         order: i,
         _sprintId: destino.id };
-      this.storyService.update(storyToUpdate)
-      .then(
-        story =>  {
-          console.log("História foi atualizada!");
-        }
-      );
+        this.storyService.update(storyToUpdate)
+        .then(
+          story =>  {
+            console.log("História foi atualizada!");
+          }
+        );
+      }
+
+      // let storyUpdate = { _id: tarefa.id, _sprintId: destino.id };
+      // this.storiesUpdateStack.push(storyUpdate);
     }
 
-    // let storyUpdate = { _id: tarefa.id, _sprintId: destino.id };
-    // this.storiesUpdateStack.push(storyUpdate);
-  }
+    resetNewOrEditContainer(): void {
+      this.newOrEditContainer = { _id: null, name: null, initialDate: null, finalDate: null};
+    }
 }

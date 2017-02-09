@@ -6,10 +6,14 @@ import { Component, ViewContainerRef } from '@angular/core';
   template: `
   <div class="row">
     <div class="col-xs-12 brand-menu-cointainer">
-      <h1>{{title}}</h1>
-      <nav>
+      <h1>
+        <i class="fa fa-tasks"></i>
+        {{title}}
+      </h1>
+
+      <!--<nav>
         <a routerLink="/roadmap" routerLinkActive="active">Gerenciador</a>
-      </nav>
+      </nav>-->
     </div>
   </div>
     <router-outlet></router-outlet>
@@ -17,7 +21,7 @@ import { Component, ViewContainerRef } from '@angular/core';
   // styleUrls: ['app.component.css']
 })
 export class AppComponent {
-  title = 'Gerenciador de Tarefas';
+  title = 'Taskr';
   private viewContainerRef: ViewContainerRef;
 
   public constructor(viewContainerRef:ViewContainerRef) {

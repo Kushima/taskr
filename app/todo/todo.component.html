@@ -1,119 +1,118 @@
 <div class="row all-sprints-container">
-  <div *ngFor="let todo of todos | orderByTodoInitialDatePipe" class="col-xs-12 col-sm-6 col-md-4 col-lg-3 sprint-container">
-    <div class="sprint-title">
-        <a class="sprint-title-edit" (click)="editContainer(todo); lgModal.show();">{{todo.name}}</a>
-        <i class="fa fa-pencil sprint-edit-icon" aria-hidden="true"></i>
-        <button class="btn-sprint-remove" (click)="delete(todo)">x</button>
-      </div>
-    <div class="sprint-date">{{todo.initialDate | date: 'dd/MM/yyyy'}} até {{todo.finalDate | date: 'dd/MM/yyyy'}}</div>
-    <div class="sprint-content">
-      <div class="sprint-content-stories" [attr.id]="todo._id" [dragula]='"first-bag"'>
-        <div [attr.id]="story._id" *ngFor="let story of (stories | storyOfSprintFilter:todo._id) | orderByStoryOrder" class="story-container">
-          <div class="story-content">
-            <div class="row">
-              <div class="col-xs-10">
-                <a class="story-title-edit" (click)="lgModalStories.show(); novoStory._sprintId = todo._id">
-                  {{story.name}}
-                </a>
-                <i class="fa fa-pencil story-edit-icon" aria-hidden="true"></i>
-              </div>
-              <div class="col-xs-2">
-                <button class="btn-story-remove" (click)="deleteStory(story)">X</button>
-              </div>
+    <div *ngFor="let todo of todos | orderByTodoInitialDatePipe" class="col-xs-12 col-sm-6 col-md-4 col-lg-3 sprint-container">
+        <div class="sprint-title">
+            <a class="sprint-title-edit" (click)="editContainer(todo); lgModal.show();">{{todo.name}}</a>
+            <i class="fa fa-pencil sprint-edit-icon" aria-hidden="true"></i>
+            <button class="btn-sprint-remove" (click)="delete(todo)">x</button>
+        </div>
+        <div class="sprint-date">{{todo.initialDate | date: 'dd/MM/yyyy'}} até {{todo.finalDate | date: 'dd/MM/yyyy'}}</div>
+        <div class="sprint-content">
+            <div class="sprint-content-stories" [attr.id]="todo._id" [dragula]='"first-bag"'>
+                <div [attr.id]="story._id" *ngFor="let story of (stories | storyOfSprintFilter:todo._id) | orderByStoryOrder" class="story-container">
+                    <div class="story-content">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <a class="story-title-edit" (click)="lgModalStories.show(); editTask(story);">
+                                  {{story.name}}
+                                </a>
+                                <i class="fa fa-pencil story-edit-icon" aria-hidden="true"></i>
+                            </div>
+                            <div class="col-xs-2">
+                                <button class="btn-story-remove" (click)="deleteStory(story)">X</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
+            <div class="story-new-container">
+                <div class="story-new-content">
+                    <button class="btn-story-new" (click)="resetNewOrEditTask(); lgModalStories.show(); isEditingTask = false; newOrEditTask._sprintId = todo._id">+</button>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="story-new-container">
-        <div class="story-new-content">
-          <button class="btn-story-new" (click)="lgModalStories.show(); novoStory._sprintId = todo._id">+</button>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 sprint-new-container">
-    <div class="sprint-new-content">
-      <button class="btn-sprint-new" (click)="resetNewOrEditContainer(); lgModal.show(); isEditingContainer = false;">+</button>
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 sprint-new-container">
+        <div class="sprint-new-content">
+            <button class="btn-sprint-new" (click)="resetNewOrEditContainer(); lgModal.show(); isEditingContainer = false;">+</button>
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- Modal para criar sprints -->
 <div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" (click)="lgModal.hide()" aria-label="Close">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="lgModal.hide()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title">Container</h4>
-      </div>
-      <div class="modal-body">
-          <form ngNoForm>
-            <div class="row">
-              <div class="col-xs-12">
-                <div class="form-group">
-                  <label for="title">Título:</label>
-                  <input [(ngModel)]="newOrEditContainer.name" type="text" class="form-control" id="title" placeholder="Identificação do Sprint">
-                </div>
-              </div>
+                <h4 class="modal-title">Container</h4>
             </div>
-            <div class="row">
-              <div class="col-xs-6">
-                <div class="form-group">
-                  <label for="initialDate">Data de Início:</label>
-                  <input [(ngModel)]="newOrEditContainer.initialDate" class="form-control" id="initialDate" placeholder="Data inicial">
-                </div>
-              </div>
-              <div class="col-xs-6">
-                <div class="form-group">
-                  <label for="finalDate">Data de fim:</label>
-                  <input [(ngModel)]="newOrEditContainer.finalDate" class="form-control" id="finalDate" placeholder="Data final">
-                </div>
-              </div>
+            <div class="modal-body">
+                <form ngNoForm>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label for="title">Title:</label>
+                                <input [(ngModel)]="newOrEditContainer.name" type="text" class="form-control" id="title" placeholder="Container description">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="initialDate">Start Date:</label>
+                                <input [(ngModel)]="newOrEditContainer.initialDate" class="form-control" id="initialDate" placeholder="Data inicial">
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="finalDate">Finish Date:</label>
+                                <input [(ngModel)]="newOrEditContainer.finalDate" class="form-control" id="finalDate" placeholder="Data final">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button *ngIf="!isEditingContainer" class="btn btn-default pull-right" (click)="addContainer(); $event.preventDefault(); lgModal.hide();">Create</button>
+                            <button *ngIf="isEditingContainer" class="btn btn-default pull-right" (click)="saveContainer(); $event.preventDefault(); lgModal.hide();">Edit</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="row">
-              <div class="col-xs-12">
-                <button *ngIf="!isEditingContainer" class="btn btn-default pull-right"
-                  (click)="add(); $event.preventDefault(); lgModal.hide();">Create</button>
-                <button *ngIf="isEditingContainer" class="btn btn-default pull-right"
-                    (click)="edit(); $event.preventDefault(); lgModal.hide();">Edit</button>
-              </div>
-            </div>
-          </form>
-      </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- Modal para criar historias -->
 <div bsModal #lgModalStories="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" (click)="lgModalStories.hide()" aria-label="Close">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="lgModalStories.hide()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title">Task</h4>
-      </div>
-      <div class="modal-body">
-          <form ngNoForm>
-            <div class="row">
-              <div class="col-xs-12">
-                <div class="form-group">
-                  <label for="title">Título:</label>
-                  <input [(ngModel)]="novoStory.name" type="text" class="form-control" id="title" placeholder="Identificação do Sprint">
-                </div>
-              </div>
+                <h4 class="modal-title">Task</h4>
             </div>
-            <div class="row">
-              <div class="col-xs-12">
-                <button class="btn btn-default pull-right" (click)="addStory(); $event.preventDefault(); lgModalStories.hide();">Submit</button>
-              </div>
+            <div class="modal-body">
+                <form ngNoForm>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label for="title">Description:</label>
+                                <input [(ngModel)]="newOrEditTask.name" type="text" class="form-control" id="title" placeholder="Task description">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button *ngIf="!isEditingTask" class="btn btn-default pull-right" (click)="addTask(); $event.preventDefault(); lgModalStories.hide();">Create</button>
+                            <button *ngIf="isEditingTask" class="btn btn-default pull-right" (click)="saveTask(); $event.preventDefault(); lgModalStories.hide();">Edit</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-          </form>
-      </div>
+        </div>
     </div>
-  </div>
 </div>
